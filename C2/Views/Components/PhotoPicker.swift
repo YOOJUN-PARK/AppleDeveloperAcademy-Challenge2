@@ -15,7 +15,7 @@ struct PhotoPicker: View {
     @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
-        PhotosPicker(selection: $selectedItems, maxSelectionCount: 3, selectionBehavior: .ordered, matching: .images) {
+        PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, selectionBehavior: .ordered, matching: .images) {
             Label("사진 선택하기", systemImage: "photo.on.rectangle.angled.fill")
                 .font(.headline)
                 .padding(.vertical, 17)
