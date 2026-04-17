@@ -8,12 +8,33 @@
 import Vision
 
 func imageClassification(imageData: Data) async -> [String] {
+    let whitelist = [
+        "tennis", "pickleball", "racket", "badminton", "table tennis", "ping pong",
+        
+        "running", "jogging", "marathon", "walking", "hiking", "climbing", "trail",
+        
+        "surfing", "swimming", "diving", "snorkeling", "kayak", "sailing",
+        
+        "soccer", "basketball", "baseball", "golf", "cycling", "bicycle",
+        
+        "gym", "fitness", "workout", "weightlifting",
+        
+        "sunrise", "sunset"
+    ]
+    
     
     do {
         let request = ClassifyImageRequest()
         let observations = try await request.perform(on: imageData)
         
-        return Array(observations.map(\.identifier).prefix(5)) // 5개의 결과 반환
+        let filteredResults = observations
+            .filter { observation in
+                whitelist.contains { keyword in
+                    observation.identifier.lowercased().contains(keyword)
+                }
+            }
+            .map { $0.identifier }
+        return Array(filteredResults.prefix(5))
         
     } catch {
         return []
