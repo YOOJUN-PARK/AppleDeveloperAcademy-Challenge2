@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FilterButton: View {
+    @Environment(\.colorScheme) var scheme
+    
     let text: String
     let icon: String
     let isSelected: Bool
@@ -17,7 +19,7 @@ struct FilterButton: View {
         Button(action: action) {
             Label(text, systemImage: icon)
                 .font(.system(size: 17, weight: .bold))
-                .foregroundStyle(isSelected ? .blue : .white)
+                .foregroundStyle(isSelected ? .blue : .lightBlack(scheme: scheme))
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
                 .background(Color.gray.opacity(0.3))

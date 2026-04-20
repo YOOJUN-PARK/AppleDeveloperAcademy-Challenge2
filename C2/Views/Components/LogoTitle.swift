@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct LogoTitle: View {
+    @Environment(\.colorScheme) var scheme
+    
     var body: some View {
         Text("Open\nActivity")
             .font(.largeTitle)
             .fontWeight(.bold)
-            .foregroundColor(.white)
+            .foregroundStyle(Color.lightBlack(scheme: scheme))
             .padding(.horizontal)
     }
 }

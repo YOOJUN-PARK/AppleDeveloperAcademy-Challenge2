@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct AddData: View {
+    @Environment(\.colorScheme) var scheme
+    
+    @FocusState private var fieldIsFocused: Bool
+    
     @State var activityData: ActivityData? = nil // 기존 activityData 수정 시
     
     @Environment(\.modelContext) private var modelContext
@@ -23,134 +27,99 @@ struct AddData: View {
     var body: some View {
         // 상단 View
         NavigationStack {
-            ZStack {
-                Color.black.ignoresSafeArea()
-                
-                ScrollView {
-                    // PhotoPicker, Text Field 묶음
+            
+            Form {
+                Section() {
                     VStack {
-                        
-                        // PhotoPicker
-                        VStack {
-                            if !imageData.isEmpty {
-                                // 사진 미리보기
-                                TabView {
-                                    ForEach(0..<imageData.count, id: \.self) { index in
-                                        if let uiImage = UIImage(data: imageData[index]) {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(height: 250)
-                                                .clipShape(RoundedRectangle(cornerRadius: 13))
-                                                .padding(.horizontal)
-                                        }
+                        if !imageData.isEmpty {
+                            // 사진 미리보기
+                            TabView {
+                                ForEach(0..<imageData.count, id: \.self) { index in
+                                    if let uiImage = UIImage(data: imageData[index]) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
                                     }
                                 }
-                                .frame(height: 250)
-                                .tabViewStyle(.page(indexDisplayMode: .automatic))
-                                
-                                Button(role: .destructive, action: {
-                                    withAnimation { imageData = [] }
-                                }) {
-                                    Label("사진 모두 지우기", systemImage: "trash")
-                                        .font(.headline)
-                                        .padding(.vertical, 7)
-                                }
-                            } else {
-                                PhotoPicker(imageData: $imageData)
-                                Text("여러 Activity 사진을 선택하세요.")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .padding(.top, 2)
                             }
+                            .frame(height: 300)
+                            .clipShape(RoundedRectangle(cornerRadius: 13))
+                            .tabViewStyle(.page(indexDisplayMode: .automatic))
+                            
+                            Button(role: .destructive, action: {
+                                withAnimation { imageData = [] }
+                            }) {
+                                Label("사진 모두 지우기", systemImage: "trash")
+                                    .font(.headline)
+                                    .foregroundStyle(.red)
+                                    .padding(.vertical, 14)
+                                    .padding(.horizontal, 18)
+                                    .background(Color.red.opacity(0.2))
+                                    .cornerRadius(20)
+                                    .padding(.vertical, 5)
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            PhotoPicker(imageData: $imageData)
+                                .foregroundStyle(.blue)
+                                .buttonStyle(.plain)
+                            Text("다양한 Activity 사진을 선택하세요.")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                                .padding(.top, 1)
                         }
-                        .padding(.top, 20)
-                        
-                        // Text Editer
-                        VStack(alignment: .leading, spacing: 5) {
+                    }
+                    .frame(maxWidth: .infinity) // Section 내 가운데 정렬을 위해, VStack 너비 확장
+                }
+                
+                Section("제목") {
+                    TextField("어떤 활동을 하셨나요?", text: $imageTitle)
+                        .focused($fieldIsFocused)
+                        .onSubmit {
+                            fieldIsFocused.toggle()
+                        }
+                }
+                Section("내용") {
+                    TextField("자세한 내용을 기록해보세요.", text: $imageDescription, axis: .vertical)
+                        .focused($fieldIsFocused)
+                }
+                
+                Section("태그") {
+                    VStack(spacing: 0) { // Tag List
+                        ForEach(Tag.allCases, id: \.self) { tag in
                             
-                            // Title Field
-                            VStack(alignment: .leading) {
-                                Text("제목")
-                                    .font(.headline)
-                                    .foregroundColor(.white.opacity(0.9))
-                                    .padding(.leading, 7)
-                                    .padding(.top, 20)
-                                TextField("", text: $imageTitle, prompt: Text("어떤 활동을 하셨나요?").foregroundColor(.white.opacity(0.7)))
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(Color.white.opacity(0.1))
-                                    .cornerRadius(13)
-                            } // Title Field
-                            .padding(.bottom, 20)
-                            
-                            // // Description Field
-                            VStack(alignment: .leading) {
-                                Text("본문")
-                                    .font(.headline)
-                                    .foregroundColor(.white.opacity(0.9))
-                                    .padding(.leading, 7)
-                                ZStack(alignment: .topLeading) {
-                                    if imageDescription.isEmpty {
-                                        Text("자세한 내용을 기록해보세요.")
-                                            .foregroundColor(.gray.opacity(0.6))
-                                            .padding(.horizontal, 15)
-                                            .padding(.vertical, 12)
+                            Button(action: {
+                                if tags.contains(tag) { tags.removeAll { $0 == tag } }
+                                else { tags.append(tag) }
+                            } ) {
+                                // Button 한 칸
+                                HStack {
+                                    Label(tag.rawValue, systemImage: tag.iconName)
+                                        .fontWeight(.medium)
+                                        .foregroundStyle(Color.lightBlack(scheme: scheme))
+                                    
+                                    Spacer()
+                                    
+                                    if tags.contains(tag) {
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.blue)
+                                            .fontWeight(.semibold)
                                     }
-                                    TextEditor(text: $imageDescription)
-                                        .frame(minHeight: 130)
-                                        .scrollContentBackground(.hidden)
-                                        .foregroundColor(.white)
-                                        .background(Color.white.opacity(0.1))
-                                        .cornerRadius(13)
                                 }
-                            } // Description Field
-                        } // VStack - Text Editer
-                        .padding(.horizontal)
-                        .padding(.bottom, 1)
-                        
-                        // Tag Selection
-                        VStack(alignment: .leading) {
-                            Text("태그")
-                                .font(.headline)
-                                .foregroundColor(.white.opacity(0.9))
-                                .padding(.leading, 7)
-                                .padding(.top, 20)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 15)
+                            } // Button
+                            .buttonStyle(.plain)
                             
-                            VStack(spacing: 0) { // Tag List
-                                ForEach(Tag.allCases, id: \.self) { tag in
-                                    
-                                    Button(action: {
-                                        if tags.contains(tag) { tags.removeAll { $0 == tag } }
-                                        else { tags.append(tag) }
-                                    } ) {
-                                        // Button 한 칸
-                                        HStack {
-                                            Label(tag.rawValue, systemImage: tag.iconName)
-                                                .foregroundStyle(.white)
-                                            
-                                            Spacer()
-                                            
-                                            if tags.contains(tag) {
-                                                Image(systemName: "checkmark")
-                                                    .foregroundStyle(.blue)
-                                                    .fontWeight(.bold)
-                                            }
-                                        }
-                                        .padding()
-                                        .background(Color.white.opacity(0.05))
-                                    } // Button
-                                    
-                                    Divider().background(Color.gray.opacity(0.3))
-                                }
-                            } // Tag List
-                            .cornerRadius(13)
-                        } // VStack - Tag Selection
-                        .padding(.horizontal)
-                        
-                    } // VStack - Photo, Text, Tag
-                } // ScrollView
-            } // ZStack
+                            Divider().background(Color.gray.opacity(0.4))
+                        }
+                    } // Tag List
+                }
+                .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+            }
+            .onTapGesture {
+                hideKeyboard()
+            }
             .navigationTitle(activityData == nil ? "Activity 추가하기" : "Activity 수정하기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -181,8 +150,6 @@ struct AddData: View {
                     .disabled(imageTitle.isEmpty || imageData.isEmpty)
                 }
             } // toolbar
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(Color.black, for: .navigationBar)
         } // NavigationStack
         .interactiveDismissDisabled(true)
     }

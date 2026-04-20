@@ -10,6 +10,8 @@ import SwiftData
 //import Zoomable
 
 struct SheetView: View {
+    @Environment(\.colorScheme) var scheme
+    
     let activityData: ActivityData
     
     @Environment(\.dismiss) var dismiss
@@ -27,7 +29,7 @@ struct SheetView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            //Color.black.ignoresSafeArea()
             
             VStack {
                 // Image와 상단 Dismiss Button
@@ -46,7 +48,8 @@ struct SheetView: View {
                                 }
                             }
                         }
-                        .frame(height: 620)
+                        .frame(height: 250)
+                        .clipShape(RoundedRectangle(cornerRadius: 13))
                         .tabViewStyle(.page(indexDisplayMode: .automatic))
                     } else {
                         Color.gray
@@ -92,10 +95,10 @@ struct SheetView: View {
                     Text(activityData.imageTitle) // Title
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.lightBlack(scheme: scheme))
                     Text(activityData.imageDescription) // Description
                         .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(Color.lightBlack(scheme: scheme))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 15)

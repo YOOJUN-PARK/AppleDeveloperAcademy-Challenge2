@@ -9,6 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    
+    @Environment(\.colorScheme) var scheme
+    
     // 전체 ActivityData -> allActivities
     @Query private var allActivities: [ActivityData]
     
@@ -32,7 +35,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            //Color.black.ignoresSafeArea()
             VStack { // 상단 View, Filter, CardView
                 // 상단 View
                 HStack {
