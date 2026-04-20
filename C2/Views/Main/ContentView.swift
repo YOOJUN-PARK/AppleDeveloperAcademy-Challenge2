@@ -44,69 +44,72 @@ struct ContentView: View {
     @State private var showingAddData = false
     
     var body: some View {
-        ZStack {
-            //Color.black.ignoresSafeArea()
-            VStack { // 상단 View, Filter, CardView
-                // 상단 View
-                HStack {
-                    LogoTitle()
-                    Spacer()
-                    Button(action: { // ActivityData 추가 버튼
-                        showingAddData.toggle()
-                    }) {
-                        Image(systemName: "plus.circle")
-                            .font(.system(size: 50))
-                            .foregroundStyle(.white)
-                    }
-                    .sheet(isPresented: $showingAddData) {
-                        AddData()
-                    }
+        VStack { // 상단 View, Filter, CardView
+            // 상단 View
+            HStack {
+                LogoTitle()
+                Spacer()
+                Button(action: { // ActivityData 추가 버튼
+                    showingAddData.toggle()
+                }) {
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 40))
+                        .foregroundStyle(Color.lightBlack(scheme: scheme))
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 3)
+                .sheet(isPresented: $showingAddData) {
+                    AddData()
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 1)
+            
+            // Filter Scroll View
+            HStack {
+                SegmentFilterButton(selectedTimeSlot: $selectedTimeSlot)
                 
-                // Filter Scroll View
-                HStack {
-                    SegmentFilterButton(selectedTimeSlot: $selectedTimeSlot)
-                    
-                    Rectangle()
-                        .fill(Color(.systemGray2))
-                        .frame(width: 1.5, height: 24)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 9) {
-                            ForEach(Tag.allCases, id: \.self) { tag in
-                                FilterButton(text: tag.rawValue, icon: tag.iconName, isSelected: tag == selectedTag) {
-                                    // selectedTag가 바뀔 때, selectedTag와 연관된 View들을 다시 계산하여 반환
-                                    withAnimation(.easeInOut(duration: 0.5)) {
-                                        if selectedTag == tag {
-                                            selectedTag = nil
-                                        } else {
-                                            selectedTag = tag
-                                        }
-                                    } // withAnimation
-                                } // FilterButton의 action 부분
-                            }
+                Rectangle()
+                    .fill(Color(.systemGray2))
+                    .frame(width: 1.5, height: 24)
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 9) {
+                        ForEach(Tag.allCases, id: \.self) { tag in
+                            FilterButton(text: tag.rawValue, icon: tag.iconName, isSelected: tag == selectedTag) {
+                                // selectedTag가 바뀔 때, selectedTag와 연관된 View들을 다시 계산하여 반환
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    if selectedTag == tag {
+                                        selectedTag = nil
+                                    } else {
+                                        selectedTag = tag
+                                    }
+                                } // withAnimation
+                            } // FilterButton의 action 부분
                         }
                     }
-                    .mask(
-                        HStack(spacing: 0) {
-                            
-                            Rectangle().fill(Color.black)
-                            
-                            LinearGradient(
-                                colors: [.black, .clear],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                            .frame(width: 24)
-                        }
-                    )
                 }
-                .padding(.leading)
-                .padding(.top, 5)
-                .padding(.bottom, 5)
-                
+                .mask(
+                    HStack(spacing: 0) {
+                        
+                        Rectangle().fill(Color.black)
+                        
+                        LinearGradient(
+                            colors: [.black, .clear],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: 24)
+                    }
+                )
+            }
+            .padding(.leading, 15)
+            .padding(.bottom, 1)
+            
+            ZStack {
+                if scheme == .light {
+                    Color(.white).cornerRadius(30).ignoresSafeArea()
+                } else {
+                    Color(.systemGray6).cornerRadius(30).ignoresSafeArea()
+                }
                 
                 // filterdActivities 위한 Card View
                 ScrollView(.vertical, showsIndicators: true) {
@@ -115,10 +118,13 @@ struct ContentView: View {
                             ActivityCard(activityData: activityData, selectedActivity: $selectedActivity)
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
                 }
-            } // VStack
-        } // ZStack
+                .padding(.top, 20)
+            }
+            
+        } // VStack
+        .background(scheme == .light ? Color(.systemGray6) : .black)
         
         // SheetView: selectedActivity에 값이 들어오면 발생
         .sheet(item: $selectedActivity) {

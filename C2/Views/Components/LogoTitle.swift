@@ -12,19 +12,12 @@ struct LogoTitle: View {
     
     var body: some View {
         Text("Open\nActivity")
-            .font(.largeTitle)
+            .font(.title)
             .fontWeight(.bold)
             .foregroundStyle(Color.lightBlack(scheme: scheme))
-            .padding(.horizontal)
     }
 }
 
 #Preview {
-    ZStack {
-        Color.black.ignoresSafeArea()
-        VStack{
-            LogoTitle()
-            //Spacer()
-        }
-    }
+    LogoTitle()
 }
