@@ -8,10 +8,16 @@
 import SwiftData
 import Foundation
 
-// Filter를 위한 Tags 열거형
-enum Tag: String, CaseIterable, Codable {
+enum TimeSlot: String, CaseIterable, Codable {
+    case all = "전체"
     case morning = "오전"
     case evening = "오후"
+    
+    static var selectableCases: [TimeSlot] { [.morning, .evening] }
+}
+
+// Filter를 위한 Tags 열거형
+enum Tag: String, CaseIterable, Codable {
     case tennis = "테니스"
     case running = "러닝"
     case tabletennis = "탁구"
@@ -20,8 +26,6 @@ enum Tag: String, CaseIterable, Codable {
     
     var iconName: String {
         switch self {
-        case .morning: return "sun.max"
-        case .evening: return "moon"
         case .tennis: return "figure.tennis"
         case .running: return "figure.run"
         case .tabletennis: return "figure.table.tennis"
@@ -36,14 +40,16 @@ enum Tag: String, CaseIterable, Codable {
 class ActivityData: Identifiable {
     @Attribute(.unique) var id = UUID()
     
-    var tags: [Tag]
+    var timeSlot: TimeSlot
+    var tag: Tag
     
     var imageTitle: String
     var imageDescription: String
     var imageData: [Data]
     
-    init(tags: [Tag], imageTitle: String, imageDescription: String, imageData: [Data] = []) {
-        self.tags = tags
+    init(timeSlot: TimeSlot, tag: Tag, imageTitle: String, imageDescription: String, imageData: [Data] = []) {
+        self.timeSlot = timeSlot
+        self.tag = tag
         self.imageTitle = imageTitle
         self.imageDescription = imageDescription
         self.imageData = imageData

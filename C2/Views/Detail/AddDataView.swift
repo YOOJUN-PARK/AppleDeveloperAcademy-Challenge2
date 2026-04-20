@@ -19,7 +19,8 @@ struct AddData: View {
     @Environment(\.dismiss) private var dismiss
     
     // activityData Model의 파라미터
-    @State var tags: [Tag] = []
+    @State var timeSlot: TimeSlot = .morning
+    @State var tag: Tag = .tennis
     @State var imageTitle: String = ""
     @State var imageDescription: String = ""
     @State var imageData: [Data] = []
@@ -80,46 +81,30 @@ struct AddData: View {
                         }
                 }
                 Section("내용") {
-                    TextField("자세한 내용을 기록해보세요.", text: $imageDescription, axis: .vertical)
+                    TextField("자세한 내용을 기록해보세요.", text: $imageDescription)
                         .focused($fieldIsFocused)
+                        .onSubmit {
+                            fieldIsFocused.toggle()
+                        }
                 }
                 
                 Section("태그") {
-                    VStack(spacing: 0) { // Tag List
-                        ForEach(Tag.allCases, id: \.self) { tag in
-                            
-                            Button(action: {
-                                if tags.contains(tag) { tags.removeAll { $0 == tag } }
-                                else { tags.append(tag) }
-                            } ) {
-                                // Button 한 칸
-                                HStack {
-                                    Label(tag.rawValue, systemImage: tag.iconName)
-                                        .fontWeight(.medium)
-                                        .foregroundStyle(Color.lightBlack(scheme: scheme))
-                                    
-                                    Spacer()
-                                    
-                                    if tags.contains(tag) {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(.blue)
-                                            .fontWeight(.semibold)
-                                    }
-                                }
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 15)
-                            } // Button
-                            .buttonStyle(.plain)
-                            
-                            Divider().background(Color.gray.opacity(0.4))
+                    Picker("시간대", selection: $timeSlot) {
+                        ForEach(TimeSlot.selectableCases, id: \.self) { eachTimeSlot in
+                            Text(eachTimeSlot.rawValue).tag(eachTimeSlot)
                         }
-                    } // Tag List
+                    }
+                    
+                    Picker("종목", selection: $tag) {
+                        ForEach(Tag.allCases, id: \.self) { eachTag in
+                            Text(eachTag.rawValue).tag(eachTag)
+                        }
+                    }
                 }
-                .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
+//            .onTapGesture {
+//                hideKeyboard()
+//            }
             .navigationTitle(activityData == nil ? "Activity 추가하기" : "Activity 수정하기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -131,7 +116,8 @@ struct AddData: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("저장") {
                         if let activityData = activityData { // 기존 activityData를 수정할 때,
-                            activityData.tags = tags
+                            activityData.timeSlot = timeSlot
+                            activityData.tag = tag
                             activityData.imageTitle = imageTitle
                             activityData.imageDescription = imageDescription
                             activityData.imageData = imageData
@@ -139,7 +125,7 @@ struct AddData: View {
                             try? modelContext.save()
                             dismiss()
                         } else { // 새 activityData를 추가할 때
-                            let newActivityData = ActivityData(tags: tags, imageTitle: imageTitle, imageDescription: imageDescription, imageData: imageData)
+                            let newActivityData = ActivityData(timeSlot: timeSlot, tag: tag, imageTitle: imageTitle, imageDescription: imageDescription, imageData: imageData)
                             modelContext.insert(newActivityData)
                             try? modelContext.save()
                             dismiss()

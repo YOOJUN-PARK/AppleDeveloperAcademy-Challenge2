@@ -119,7 +119,7 @@ struct SheetView: View {
                     }
                     .padding(.trailing, 15)
                     .sheet(isPresented: $showingAddData) {
-                        AddData(activityData: activityData, tags: activityData.tags, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
+                        AddData(activityData: activityData, tag: activityData.tag, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
                     }
                     
                     // activityData delete

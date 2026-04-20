@@ -18,22 +18,37 @@ struct FilterButton: View {
     var body: some View {
         Button(action: action) {
             Label(text, systemImage: icon)
-                .font(.system(size: 17, weight: .bold))
+                .font(.system(size: 15))
                 .foregroundStyle(isSelected ? .blue : .lightBlack(scheme: scheme))
-                .padding(.horizontal, 18)
-                .padding(.vertical, 10)
-                .background(Color.gray.opacity(0.3))
-                .cornerRadius(100)
+                .fontWeight(isSelected ? .bold : .semibold)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6.2)
+                .background(isSelected ? Color(.blue).opacity(0.2) : Color(.systemGray5).opacity(0.7))
+                .cornerRadius(90)
         }
     }
 }
 
-#Preview {
-    ZStack {
-        Color.black.ignoresSafeArea()
-        HStack {
-            FilterButton(text: "Test1", icon: "sun.max", isSelected: true) {}
-            FilterButton(text: "Test2", icon: "car", isSelected: false) {}
+struct SegmentFilterButton: View {
+    
+    @Binding var selectedTimeSlot: TimeSlot
+    
+    var body: some View {
+        Picker("TimeSlot", selection: $selectedTimeSlot) {
+            Text("전체").tag(TimeSlot.all)
+            Text("☀️").tag(TimeSlot.morning)
+            Text("🌔").tag(TimeSlot.evening)
         }
+        .pickerStyle(.segmented)
+        .frame(width: 110, height: 10)
+    }
+}
+
+#Preview {
+    @Previewable @State var selectedTimeSlot: TimeSlot = .all
+    HStack {
+        FilterButton(text: "Test1", icon: "sun.max", isSelected: true) {}
+        FilterButton(text: "Test2", icon: "car", isSelected: false) {}
+        SegmentFilterButton(selectedTimeSlot: $selectedTimeSlot)
     }
 }

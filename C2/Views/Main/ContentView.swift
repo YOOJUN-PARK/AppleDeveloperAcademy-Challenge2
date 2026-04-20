@@ -16,14 +16,24 @@ struct ContentView: View {
     @Query private var allActivities: [ActivityData]
     
     // 현재 Filtered 된 Tag 정보
+    @State private var selectedTimeSlot: TimeSlot = .all
     @State private var selectedTag: Tag? = nil
+    
     
     // Filter로 selected 된 ActivityData -> filterdActivities
     var filterdActivities: [ActivityData] {
-        if let tag = selectedTag {
-            return allActivities.filter {$0.tags.contains(tag)}
+        if selectedTimeSlot == .all {
+            if let selectedTag {
+                return allActivities.filter({$0.tag == selectedTag})
+            } else {
+                return allActivities
+            }
         } else {
-            return allActivities
+            if let selectedTag {
+                return allActivities.filter({$0.timeSlot == selectedTimeSlot}).filter({$0.tag == selectedTag})
+            } else {
+                return allActivities.filter({$0.timeSlot == selectedTimeSlot})
+            }
         }
     }
     
@@ -56,25 +66,47 @@ struct ContentView: View {
                 .padding(.vertical, 3)
                 
                 // Filter Scroll View
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 11) {
-                        ForEach(Tag.allCases, id: \.self) { tag in
-                            FilterButton(text: tag.rawValue, icon: tag.iconName, isSelected: tag == selectedTag) {
-                                // selectedTag가 바뀔 때, selectedTag와 연관된 View들을 다시 계산하여 반환
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    if selectedTag == tag {
-                                        selectedTag = nil
-                                    } else {
-                                        selectedTag = tag
-                                    }
-                                } // withAnimation
-                            } // FilterButton의 action 부분
+                HStack {
+                    SegmentFilterButton(selectedTimeSlot: $selectedTimeSlot)
+                    
+                    Rectangle()
+                        .fill(Color(.systemGray2))
+                        .frame(width: 1.5, height: 24)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 9) {
+                            ForEach(Tag.allCases, id: \.self) { tag in
+                                FilterButton(text: tag.rawValue, icon: tag.iconName, isSelected: tag == selectedTag) {
+                                    // selectedTag가 바뀔 때, selectedTag와 연관된 View들을 다시 계산하여 반환
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        if selectedTag == tag {
+                                            selectedTag = nil
+                                        } else {
+                                            selectedTag = tag
+                                        }
+                                    } // withAnimation
+                                } // FilterButton의 action 부분
+                            }
                         }
                     }
-                    .padding(.horizontal)
+                    .mask(
+                        HStack(spacing: 0) {
+                            
+                            Rectangle().fill(Color.black)
+                            
+                            LinearGradient(
+                                colors: [.black, .clear],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                            .frame(width: 24)
+                        }
+                    )
                 }
-                .padding(.top, 15)
+                .padding(.leading)
+                .padding(.top, 5)
                 .padding(.bottom, 5)
+                
                 
                 // filterdActivities 위한 Card View
                 ScrollView(.vertical, showsIndicators: true) {
