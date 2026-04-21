@@ -1,5 +1,5 @@
 //
-//  AddDataView.swift
+//  AddActivityView.swift
 //  C2
 //
 //  Created by YOOJUN PARK on 4/15/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct AddData: View {
+struct AddActivityView: View {
     @Environment(\.colorScheme) var scheme
     
     @FocusState private var fieldIsFocused: Bool
@@ -142,5 +142,5 @@ struct AddData: View {
 }
 
 #Preview {
-    AddData()
+    AddActivityView()
 }

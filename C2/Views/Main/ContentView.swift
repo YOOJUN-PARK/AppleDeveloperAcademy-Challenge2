@@ -39,9 +39,6 @@ struct ContentView: View {
         }
     }
     
-    // Sheet View를 위해, 현재 선택된 ActivityData Class의 포인터 저장
-    @State private var selectedActivity: ActivityData? = nil
-    
     // ActivityData 추가를 위한 Sheet
     @State private var showingAddData = false
     
@@ -110,7 +107,10 @@ struct ContentView: View {
                     ScrollView(.vertical, showsIndicators: true) {
                         VStack(spacing: 20) {
                             ForEach(filterdActivities.reversed()) { activityData in
-                                ActivityCard(activityData: activityData, selectedActivity: $selectedActivity)
+                                NavigationLink(destination: ActivityDetailView(activityData: activityData)) {
+                                    ActivityCard(activityData: activityData)
+                                }
+                                .buttonStyle(ActivityCard.CardButtonStyle())
                             }
                         }
                         .padding(.horizontal, 20)
@@ -121,14 +121,8 @@ struct ContentView: View {
             } // VStack
             .background(scheme == .light ? Color(.systemGray6) : .black)
             
-            // SheetView: selectedActivity에 값이 들어오면 발생
-            .sheet(item: $selectedActivity) {
-                activityData in SheetView(activityData: activityData)
-                    .presentationDragIndicator(.visible)
-            }
-            
             .sheet(isPresented: $showingAddData) {
-                AddData()
+                AddActivityView()
             }
             
             .toolbar(.hidden, for: .navigationBar)

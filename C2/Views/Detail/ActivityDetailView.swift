@@ -1,5 +1,5 @@
 //
-//  SheetView.swift
+//  ActivityDetailView.swift
 //  C2
 //
 //  Created by YOOJUN PARK on 4/15/26.
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 //import Zoomable
 
-struct SheetView: View {
+struct ActivityDetailView: View {
     @Environment(\.colorScheme) var scheme
     
     let activityData: ActivityData
@@ -119,7 +119,7 @@ struct SheetView: View {
                     }
                     .padding(.trailing, 15)
                     .sheet(isPresented: $showingAddData) {
-                        AddData(activityData: activityData, tag: activityData.tag, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
+                        AddActivityView(activityData: activityData, tag: activityData.tag, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
                     }
                     
                     // activityData delete
@@ -149,5 +149,5 @@ struct SheetView: View {
 }
 
 #Preview {
-    SheetView(activityData: testData7)
+    ActivityDetailView(activityData: testData7)
 }
