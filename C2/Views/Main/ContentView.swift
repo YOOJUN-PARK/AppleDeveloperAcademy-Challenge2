@@ -11,7 +11,7 @@ import SwiftData
 struct ContentView: View {
     
     @State var imageData: [Data] = [] // 연산에 이용할 이미지
-    @State var detectedTags: [String] = [] // Vision 결과
+    @State var detectedTags: (timeSlot: String?, tag: String?) = (nil, nil) // Vision 결과
     
     var body: some View {
         VStack {
@@ -35,12 +35,19 @@ struct ContentView: View {
                 .tabViewStyle(.page(indexDisplayMode: .automatic))
                 
                 // Vision 결과 출력
-                ForEach(detectedTags, id: \.self) { tag in
+                if let timeSlot = detectedTags.timeSlot {
+                    Text("\(timeSlot)")
+                        .padding(5)
+                        .background(Color.blue.opacity(0.2))
+                        .cornerRadius(5)
+                }
+                if let tag = detectedTags.tag {
                     Text("\(tag)")
                         .padding(5)
                         .background(Color.blue.opacity(0.2))
                         .cornerRadius(5)
                 }
+                
             }
         }
         // Vision 실행
