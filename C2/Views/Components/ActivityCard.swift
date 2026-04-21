@@ -45,30 +45,26 @@ struct ActivityCard: View {
                 
                 // Activity Image 위에 Button과 Text 오버레이
                 VStack(alignment: .leading, spacing: 8) {
-                    // SheetViewButton
-                    HStack {
-                        Spacer()
-                        // 현재 CardView ActivityData의 참조를 저장: .sheet를 위한 trigger
-                        Button(action: { selectedActivity =  activityData}) {
-                            Image(systemName: "arrow.up.right.square.fill")
-                                .font(.system(size: 35))
-                                .foregroundColor(.white)
-                        }
-                    }
-                    .padding(.horizontal, 0)
-                    .padding(.vertical, 18)
-                    
                     Spacer()
                     
-                    // Text
-                    Text(activityData.imageTitle) // Title
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                    Text(activityData.imageDescription) // Description
+                    // Title and Button
+                    HStack {
+                        Text(activityData.imageTitle) // Title
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                        
+                        Image(systemName: "chevron.right") // moreButton
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    
+                    // Description
+                    Text(activityData.imageDescription)
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.7))
+                        .lineLimit(2)
                 }
                 .frame(maxWidth: 320, alignment: .leading)
                 .padding(.bottom, 22)
@@ -93,8 +89,6 @@ struct ActivityCard: View {
 #Preview {
     @Previewable @State var selectedActivity: ActivityData? = nil
     
-    ZStack {
-        Color.black.ignoresSafeArea()
-        ActivityCard(activityData: testData8, selectedActivity: $selectedActivity)
-    }
+    ActivityCard(activityData: testData8, selectedActivity: $selectedActivity)
+    
 }
