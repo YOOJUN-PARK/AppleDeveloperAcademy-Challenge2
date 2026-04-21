@@ -10,8 +10,8 @@ import Foundation
 
 enum TimeSlot: String, CaseIterable, Codable {
     case all = "전체"
-    case morning = "오전"
-    case evening = "오후"
+    case morning = "☀️ 오전"
+    case evening = "🌔 오후"
     
     static var selectableCases: [TimeSlot] { [.morning, .evening] }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-//import Zoomable
+import MapKit
 
 struct ActivityDetailView: View {
     @Environment(\.colorScheme) var scheme
@@ -22,132 +22,117 @@ struct ActivityDetailView: View {
     // ActivityData 삭제를 위한 Alert
     @State private var showingAlert = false
     
-    // Image 확대를 위한 Scale
-    @GestureState private var magnifyBy = 1.0
-    // Image Drag를 위한
-    @State private var dragOffset = CGSize.zero
+    @State private var mapPosition: MapCameraPosition = .camera(
+        MapCamera(
+            centerCoordinate: .school,
+            distance: 1200,
+            heading: 0,
+            pitch: 0
+        )
+    )
     
     var body: some View {
-        ZStack {
-            //Color.black.ignoresSafeArea()
-            
-            VStack {
-                // Image와 상단 Dismiss Button
-                ZStack {
-                    // Activity Image 로딩
-                    if !activityData.imageData.isEmpty {
-                        TabView {
-                            ForEach(0..<activityData.imageData.count, id: \.self) { index in
-                                if let uiImage = UIImage(data: activityData.imageData[index]) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .scaleEffect(magnifyBy)
-                                        .offset(dragOffset)
-                                        .animation(.interactiveSpring(), value: dragOffset)
-                                }
-                            }
+        VStack {
+            // Image
+            if !activityData.imageData.isEmpty {
+                TabView {
+                    ForEach(0..<activityData.imageData.count, id: \.self) { index in
+                        if let uiImage = UIImage(data: activityData.imageData[index]) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
                         }
-                        .frame(height: 250)
-                        .clipShape(RoundedRectangle(cornerRadius: 13))
-                        .tabViewStyle(.page(indexDisplayMode: .automatic))
-                    } else {
-                        Color.gray
-                    }
-                    
-                    // dismiss Button
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button(action: { dismiss() }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 50))
-                                    .foregroundColor(.white)
-                            }
-                            .padding(.top, 15)
-                            .padding(.trailing, 15)
-                        }
-                        Spacer()
                     }
                 }
-                .simultaneousGesture(
-                    MagnifyGesture()
-                        .updating($magnifyBy) { value, gestureState, transaction in
-                            gestureState = value.magnification
-                        }
-                    
-                )
-                .simultaneousGesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            if magnifyBy > 1.0 {
-                                dragOffset = gesture.translation
-                            }
-                        }
-                        .onEnded { gesture in
-                            dragOffset = .zero
-                        }
-                )
-                .zIndex(1)
-                
-                // Text
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(activityData.imageTitle) // Title
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundStyle(Color.lightBlack(scheme: scheme))
-                    Text(activityData.imageDescription) // Description
-                        .font(.subheadline)
-                        .foregroundStyle(Color.lightBlack(scheme: scheme))
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 15)
-                .padding(.horizontal, 29)
-                
-                // Buttons
-                HStack {
-                    // activityData edit
-                    Button(action: {
-                        showingAddData.toggle()
-                    }) {
-                        Label("수정하기", systemImage: "pencil.line")
-                            .font(.headline)
-                            .padding(.vertical, 17)
-                            .padding(.horizontal, 40)
-                            .background(Color.blue.opacity(0.2))
-                            .cornerRadius(20)
-                    }
-                    .padding(.trailing, 15)
-                    .sheet(isPresented: $showingAddData) {
-                        AddActivityView(activityData: activityData, tag: activityData.tag, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
-                    }
-                    
-                    // activityData delete
-                    Button(role: .destructive, action: {
-                        showingAlert.toggle()
-                    }) {
-                        Label("삭제하기", systemImage: "trash")
-                            .font(.headline)
-                            .padding(.vertical, 17)
-                            .padding(.horizontal, 40)
-                            .background(Color.red.opacity(0.2))
-                            .cornerRadius(20)
-                    }
-                    .alert("Activity 삭제? 질문.", isPresented: $showingAlert) {
-                        Button("삭제하기", role: .destructive) {
-                            modelContext.delete(activityData)
-                            dismiss() // Sheet 닫기
-                        }
-                        Button("취소", role: .cancel) { }
-                    }
-                } // HStack - Buttons
-            } // VStack
+                .frame(height: 300)
+                .clipShape(RoundedRectangle(cornerRadius: 13))
+                .tabViewStyle(.page(indexDisplayMode: .automatic))
+                .padding(.horizontal, 2)
+                .padding(.top, 5)
+            } else {
+                Color.gray
+                    .frame(height: 300)
+                    .clipShape(RoundedRectangle(cornerRadius: 13))
+                    .padding(.horizontal, 2)
+                    .padding(.top, 5)
+            }
             
-        } // ZStack
+            // UserInfo, Tags
+            HStack() {
+                Text("UserName")
+                    .font(.system(size: 20))
+                    .fontWeight(.semibold)
+                
+                FilterButton(text: activityData.timeSlot.rawValue, icon: "", isSelected: false, action: {})
+                FilterButton(text: activityData.tag.rawValue, icon: activityData.tag.iconName, isSelected: false, action: {})
+                
+                Spacer()
+            }
+            .padding(.top, 5)
+            .padding(.horizontal, 20)
+            
+            // Text
+            VStack(alignment: .leading, spacing: 10) {
+                Text(activityData.imageTitle) // Title
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.lightBlack(scheme: scheme))
+                Text(activityData.imageDescription) // Description
+                    .font(.subheadline)
+                    .foregroundStyle(Color.lightBlack(scheme: scheme))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 5)
+            .padding(.horizontal, 20)
+            
+            Map(position: $mapPosition) {
+                Marker("school", coordinate: .school)
+                    .annotationTitles(.hidden)
+            }
+            .cornerRadius(13)
+            .padding(.top, 3)
+            .padding(.bottom, 10)
+            .padding(.horizontal, 15)
+            
+        } // VStack
+        
+        .navigationTitle("자세히 보기")
+        .navigationBarTitleDisplayMode(.inline)
+        
+        .toolbar {
+            ToolbarSpacer(.flexible, placement: .bottomBar)
+            
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: { showingAddData.toggle() }) {
+                    Image(systemName: "pencil")
+                        .foregroundStyle(Color.blue)
+                        .fontWeight(.medium)
+                }
+                .sheet(isPresented: $showingAddData) {
+                    AddActivityView(activityData: activityData, tag: activityData.tag, imageTitle: activityData.imageTitle, imageDescription: activityData.imageDescription, imageData: activityData.imageData)
+                }
+            }
+            
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: { showingAlert.toggle() }) {
+                    Image(systemName: "trash")
+                        .foregroundStyle(Color.red)
+                        .fontWeight(.medium)
+                }
+                .alert("Activity 삭제? 질문.", isPresented: $showingAlert) {
+                    Button("삭제하기", role: .destructive) {
+                        modelContext.delete(activityData)
+                        dismiss() // Sheet 닫기
+                    }
+                    Button("취소", role: .cancel) { }
+                }
+            }
+        }
+        
     } // body
     
 }
 
 #Preview {
-    ActivityDetailView(activityData: testData7)
+    ActivityDetailView(activityData: testData4)
 }

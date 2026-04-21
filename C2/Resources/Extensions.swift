@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 extension Color {
     static func lightBlack(scheme: ColorScheme) -> Color {
@@ -31,4 +32,8 @@ extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+}
+
+extension CLLocationCoordinate2D {
+    static let school = CLLocationCoordinate2D(latitude: 36.01111, longitude: 129.32293)
 }
