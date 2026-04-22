@@ -13,6 +13,7 @@ struct AddActivityView: View {
     
     @FocusState private var fieldIsFocused: Bool
     
+    @Query private var user: [UserData]
     @State var activityData: ActivityData? = nil // 기존 activityData 수정 시
     
     @Environment(\.modelContext) private var modelContext
@@ -127,6 +128,9 @@ struct AddActivityView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("저장") {
                         if let activityData = activityData { // 기존 activityData를 수정할 때,
+                            activityData.authorName = user.first?.userName ?? ""
+                            activityData.authorImage = user.first?.userImage
+                            
                             activityData.timeSlot = timeSlot
                             activityData.tag = tag
                             activityData.imageTitle = imageTitle
@@ -136,7 +140,7 @@ struct AddActivityView: View {
                             try? modelContext.save()
                             dismiss()
                         } else { // 새 activityData를 추가할 때
-                            let newActivityData = ActivityData(timeSlot: timeSlot, tag: tag, imageTitle: imageTitle, imageDescription: imageDescription, imageData: imageData)
+                            let newActivityData = ActivityData(authorName: user.first?.userName ?? "", authorImage: user.first?.userImage ,timeSlot: timeSlot, tag: tag, imageTitle: imageTitle, imageDescription: imageDescription, imageData: imageData)
                             modelContext.insert(newActivityData)
                             try? modelContext.save()
                             dismiss()

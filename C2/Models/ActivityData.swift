@@ -48,6 +48,9 @@ enum Tag: String, CaseIterable, Codable {
 class ActivityData: Identifiable {
     @Attribute(.unique) var id = UUID()
     
+    var authorName: String
+    var authorImage: Data?
+    
     var timeSlot: TimeSlot
     var tag: Tag
     
@@ -55,7 +58,9 @@ class ActivityData: Identifiable {
     var imageDescription: String
     var imageData: [Data]
     
-    init(timeSlot: TimeSlot, tag: Tag, imageTitle: String, imageDescription: String, imageData: [Data] = []) {
+    init(authorName: String, authorImage: Data? = nil, timeSlot: TimeSlot, tag: Tag, imageTitle: String, imageDescription: String, imageData: [Data]) {
+        self.authorName = authorName
+        self.authorImage = authorImage
         self.timeSlot = timeSlot
         self.tag = tag
         self.imageTitle = imageTitle

@@ -44,14 +44,14 @@ struct ActivityDetailView: View {
                         }
                     }
                 }
-                .frame(height: 300)
+                .frame(height: 250)
                 .clipShape(RoundedRectangle(cornerRadius: 13))
                 .tabViewStyle(.page(indexDisplayMode: .automatic))
                 .padding(.horizontal, 2)
                 .padding(.top, 5)
             } else {
                 Color.gray
-                    .frame(height: 300)
+                    .frame(height: 250)
                     .clipShape(RoundedRectangle(cornerRadius: 13))
                     .padding(.horizontal, 2)
                     .padding(.top, 5)
@@ -59,20 +59,49 @@ struct ActivityDetailView: View {
             
             // UserInfo, Tags
             HStack() {
-                Text("UserName")
-                    .font(.system(size: 20))
-                    .fontWeight(.semibold)
+                if let imageData = activityData.authorImage,
+                   let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 35, height: 35)
+                        .clipShape(Circle())
+                } else {
+                    Circle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(width: 35, height: 35)
+                        .overlay {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(.gray)
+                        }
+                }
                 
-                FilterButton(text: activityData.timeSlot.rawValue, icon: "", isSelected: false, action: {})
-                FilterButton(text: activityData.tag.rawValue, icon: activityData.tag.iconName, isSelected: false, action: {})
+                Text(activityData.authorName)
+                    .font(.system(size: 25))
+                    .fontWeight(.medium)
                 
                 Spacer()
+                
+                Button(action: {}) {
+                    Text(activityData.timeSlot.rawValue)
+                        .font(.system(size: 15))
+                        .foregroundStyle(Color.lightBlack(scheme: scheme))
+                        .fontWeight(.semibold)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6.2)
+                        .background(Color(.systemGray5).opacity(0.7))
+                        .cornerRadius(90)
+                }
+                FilterButton(text: activityData.tag.rawValue, icon: activityData.tag.iconName, isSelected: false, action: {})
+                
+                
             }
-            .padding(.top, 5)
+            .padding(.top, 50)
             .padding(.horizontal, 20)
             
             // Text
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 7) {
                 Text(activityData.imageTitle) // Title
                     .font(.title)
                     .fontWeight(.bold)
@@ -82,17 +111,17 @@ struct ActivityDetailView: View {
                     .foregroundStyle(Color.lightBlack(scheme: scheme))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 5)
-            .padding(.horizontal, 20)
+            .padding(.top, 1)
+            .padding(.horizontal, 24)
             
             Map(position: $mapPosition) {
                 Marker("school", coordinate: .school)
                     .annotationTitles(.hidden)
             }
             .cornerRadius(13)
-            .padding(.top, 3)
+            .padding(.top, 10)
             .padding(.bottom, 10)
-            .padding(.horizontal, 15)
+            .padding(.horizontal, 20)
             
         } // VStack
         
