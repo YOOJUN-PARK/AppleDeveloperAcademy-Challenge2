@@ -43,7 +43,7 @@ enum Tag: String, CaseIterable, Codable {
     }
 }
 
-// 자료구조 Schema
+// Schema
 @Model
 class ActivityData: Identifiable {
     @Attribute(.unique) var id = UUID()
@@ -61,5 +61,17 @@ class ActivityData: Identifiable {
         self.imageTitle = imageTitle
         self.imageDescription = imageDescription
         self.imageData = imageData
+    }
+}
+@Model
+class UserData: Identifiable {
+    @Attribute(.unique) var id = UUID()
+    
+    var userName: String
+    var userImage: Data?
+    
+    init(userName: String, userImage: Data? = nil) {
+        self.userName = userName
+        self.userImage = userImage
     }
 }

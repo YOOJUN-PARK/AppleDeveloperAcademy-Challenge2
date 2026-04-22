@@ -40,10 +40,36 @@ struct PhotoPicker: View {
     }
 }
 
+struct ProfilePhotoPicker: View {
+    @Binding var imageData: Data? // 선택 이미지 매핑
+    @State var selectedItem: PhotosPickerItem? = nil
+    
+    var body: some View {
+        PhotosPicker(selection: $selectedItem, matching: .images) {
+            Image(systemName: "plus.circle.fill")
+                .font(.system(size: 34))
+                .foregroundStyle(.blue)
+                .background(Color.white.clipShape(Circle()))
+            
+        }
+        .onChange(of: selectedItem) { oldValue, newValue in
+            Task {
+                if let data = try? await newValue?.loadTransferable(type: Data.self) {
+                    await MainActor.run {
+                        self.imageData = data
+                    }
+                }
+            }
+        }
+    }
+}
+
 #Preview {
     @Previewable @State var imageData: [Data] = []
-    ZStack {
-        Color.black.ignoresSafeArea()
+    @Previewable @State var profile: Data? = nil
+    
+    HStack(spacing: 20) {
         PhotoPicker(imageData: $imageData)
+        ProfilePhotoPicker(imageData: $profile)
     }
 }

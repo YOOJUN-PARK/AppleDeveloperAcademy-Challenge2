@@ -14,6 +14,6 @@ struct C2App: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: ActivityData.self)
+        .modelContainer(for: [ActivityData.self, UserData.self])
     }
 }

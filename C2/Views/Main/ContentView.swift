@@ -11,9 +11,11 @@ import SwiftData
 struct ContentView: View {
     
     @Environment(\.colorScheme) var scheme
+    @Environment(\.modelContext) private var modelContext
     
     // 전체 ActivityData -> allActivities
     @Query private var allActivities: [ActivityData]
+    @Query private var user: [UserData]
     
     // 현재 Filtered 된 Tag 정보
     @State private var selectedTimeSlot: TimeSlot = .all
@@ -40,8 +42,8 @@ struct ContentView: View {
     }
     
     // ActivityData 추가를 위한 Sheet
+    @State private var showingUserInfo = false
     @State private var showingAddData = false
-    
     @State private var searchText: String = ""
     
     var body: some View {
@@ -51,6 +53,7 @@ struct ContentView: View {
                 HStack {
                     LogoTitle()
                     Spacer()
+                    ProfileButton(userImage: user.first?.userImage) { showingUserInfo.toggle() }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 1)
@@ -121,6 +124,16 @@ struct ContentView: View {
             } // VStack
             .background(scheme == .light ? Color(.systemGray6) : .black)
             
+            .sheet(isPresented: $showingUserInfo) {
+                UserInfoView(
+                    userData: user.first,
+                    userName: user.first?.userName ?? "",
+                    userImage: user.first?.userImage
+                )
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.fraction(0.43), .large])
+            }
+            
             .sheet(isPresented: $showingAddData) {
                 AddActivityView()
             }
@@ -139,6 +152,13 @@ struct ContentView: View {
                 }
             }
         } // NavigationStack
+        .onAppear {
+            if user.isEmpty {
+                let defaultUser = UserData(userName: "YOOJUN", userImage: nil)
+                modelContext.insert(defaultUser)
+                try? modelContext.save()
+            }
+        }
         
         
     } // body
