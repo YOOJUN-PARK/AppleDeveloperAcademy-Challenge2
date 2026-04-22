@@ -58,7 +58,7 @@ let testData7 = ActivityData(
 )
 let testData8 = ActivityData(
     timeSlot: .evening,
-    tag: .tabletennis,
+    tag: .pingpong,
     imageTitle: "저녁임",
     imageDescription: "여러분께서 6전 7기에 도전하는 오 후보의 손을 잡아 주실 것을 간곡히 호소드린다",
     imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }

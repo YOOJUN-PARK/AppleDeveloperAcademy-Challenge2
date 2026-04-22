@@ -7,31 +7,38 @@
 
 import Vision
 
-func imageClassification(imageData: Data) async -> (timeSlot: String?, tag: String?) {
+func imageClassification(imageData: Data) async -> (timeSlot: TimeSlot?, tag: Tag?) {
     
-    // 선택 가능한 종목
-    let tagList = [
-        "pingpong", "tennis", "badminton",
-        "running", "hiking",
-        "surfing", "swimming",
-        "bicycle",
-        "gym"
+    let tagMap: [String: Tag] = [
+        "pingpong": .pingpong,
+        "tennis": .tennis,
+        "badminton": .badminton,
+        "running": .running,
+        "hiking": .hiking,
+        "surfing": .surfing,
+        "swimming": .swimming,
+        "bicycle": .bicycle,
+        "gym": .gym
     ]
     
-    // 오전, 오후를 구별하기 위한 identifier
-    let timeSlotList = ["blue_sky", "night_sky"]
+    let timeSlotMap: [String: TimeSlot] = [
+        "blue_sky": .morning,
+        "night_sky": .evening
+    ]
     
     do {
         let request = ClassifyImageRequest()
         let observations = try await request.perform(on: imageData)
         
-        let topTag = observations.first { observation in
-            tagList.contains { observation.identifier.lowercased().contains($0) }
-        }?.identifier.lowercased()
+        var topTag: Tag? = nil
+        var topTimeSlot: TimeSlot? = nil
         
-        let topTimeSlot = observations.first { observation in
-            timeSlotList.contains { observation.identifier.lowercased().contains($0) }
-        }?.identifier.lowercased()
+        for observation in observations { // observations은 confidence 내림차순 정렬.
+            let id = observation.identifier.lowercased()
+            if topTag == nil { topTag = tagMap.first { id.contains($0.key) }?.value }
+            if topTimeSlot == nil { topTimeSlot = timeSlotMap.first { id.contains($0.key) }?.value }
+            if topTag != nil && topTimeSlot != nil { break }
+        }
         
         return (topTimeSlot, topTag)
         

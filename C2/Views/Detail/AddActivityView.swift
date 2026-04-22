@@ -71,6 +71,17 @@ struct AddActivityView: View {
                         }
                     }
                     .frame(maxWidth: .infinity) // Section 내 가운데 정렬을 위해, VStack 너비 확장
+                    .task(id: imageData) {
+                        guard let image = imageData.first else { return }
+                        let result = await imageClassification(imageData: image)
+                        
+                        if let timeSlot = result.timeSlot {
+                            self.timeSlot = timeSlot
+                        }
+                        if let tag = result.tag {
+                            self.tag = tag
+                        }
+                    }
                 }
                 
                 Section("제목") {
@@ -102,9 +113,9 @@ struct AddActivityView: View {
                     }
                 }
             }
-//            .onTapGesture {
-//                hideKeyboard()
-//            }
+            //            .onTapGesture {
+            //                hideKeyboard()
+            //            }
             .navigationTitle(activityData == nil ? "Activity 추가하기" : "Activity 수정하기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

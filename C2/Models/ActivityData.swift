@@ -18,19 +18,27 @@ enum TimeSlot: String, CaseIterable, Codable {
 
 // Filter를 위한 Tags 열거형
 enum Tag: String, CaseIterable, Codable {
+    case pingpong = "탁구"
     case tennis = "테니스"
+    case badminton = "배드민턴"
     case running = "러닝"
-    case tabletennis = "탁구"
+    case hiking = "등산"
     case surfing = "서핑"
     case swimming = "수영"
+    case bicycle = "자전거"
+    case gym = "헬스"
     
     var iconName: String {
         switch self {
+        case .pingpong: return "figure.table.tennis"
         case .tennis: return "figure.tennis"
+        case .badminton: return "figure.badminton"
         case .running: return "figure.run"
-        case .tabletennis: return "figure.table.tennis"
+        case .hiking: return "figure.hiking"
         case .surfing: return "figure.surfing"
         case .swimming: return "figure.open.water.swim"
+        case .bicycle: return "figure.outdoor.cycle"
+        case .gym: return "figure.strengthtraining.traditional"
         }
     }
 }
