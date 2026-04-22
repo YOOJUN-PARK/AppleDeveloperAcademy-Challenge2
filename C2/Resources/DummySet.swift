@@ -8,58 +8,128 @@
 import SwiftUI
 
 let testData1 = ActivityData(
-    timeSlot: .evening,
+    timeSlot: .morning,
     tag: .tennis,
-    imageTitle: "아침에 하는 테니스",
-    imageDescription: "중국의 우방과 전쟁하면서 중국을 방문하는 게 형식적으로 부적절할뿐 아니라 회담 성과에도 악영향을 미칠 것이라는 전망 때문이다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    imageTitle: "함께하는 테니스 레슨 모임",
+    imageDescription: "주로 주말 오전 다같이 모여 자세 교정을 포함한 레슨을 진행합니다. 기숙사 아래 C,D 코트로 오시면 됩니다~!",
+    imageData: [UIImage(named: "Image1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData2 = ActivityData(
     timeSlot: .evening,
-    tag: .running,
-    imageTitle: "저녁에 하는 러닝",
-    imageDescription: "구글의 첨단 메모리 압축 기술 '터보퀀트' 개발이 메모리 반도체 업계에 악재로 작용했지만 충격에서 조금씩 벗어나고 있습니다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    tag: .tennis,
+    imageTitle: "코트 빌려서 친구랑 2시간 내리 침",
+    imageDescription: "오랜만에 쳤더니 온몸이 뻐근하네요. 역시 테니스는 중독성이 있어요.",
+    imageData: [UIImage(named: "Image2")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData3 = ActivityData(
-    timeSlot: .morning,
-    tag: .swimming,
-    imageTitle: "아침 수영 대회",
-    imageDescription: "현대차 계열사와 2차전지 등 일부 업종",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    timeSlot: .evening,
+    tag: .running,
+    imageTitle: "드디어 하프 마라톤 완주했습니다",
+    imageDescription: "1시간 58분. 2시간 안에 들어오는 게 목표였는데 해냈어요 ㅠㅠ",
+    imageData: [UIImage(named: "Image3")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData4 = ActivityData(
     timeSlot: .morning,
-    tag: .surfing,
-    imageTitle: "서핑을 아침에 함",
-    imageDescription: "국제유가 벤치마크인 북해산 브렌트유 가격은 4% 오른 배럴당 106달러, WTI 즉 서부 텍사스유 가격은 3% 오른 93달러를 기록했습니다. 국내 원유 수입의 70%를 차지하는 중동산 두바이유 가격은 2% 내렸지만 배럴당 142달러로 여전히 높은 수준입니다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    tag: .running,
+    imageTitle: "올림픽공원 10km 새벽 러닝",
+    imageDescription: "요즘 매일 아침 6시에 일어나서 뛰고 있는데 한 달째 유지 중입니다. 처음엔 3km도 힘들었는데 몸이 달라진 게 느껴져요.",
+    imageData: [UIImage(named: "Image4")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData5 = ActivityData(
     timeSlot: .evening,
-    tag: .surfing,
-    imageTitle: "저녁에도 서핑함",
-    imageDescription: "이란전쟁 발발 이후 코스피 시장에서 외국인 순매도는 3일 빼고 15일간 이뤄지고 있습니다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    tag: .running,
+    imageTitle: "퇴근하고 한강 5km 뛰었습니다",
+    imageDescription: "요즘 스트레스 풀려고 달리기 시작했는데 진짜 도움이 되는 것 같아요.",
+    imageData: [UIImage(named: "Image5")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData6 = ActivityData(
-    timeSlot: .evening,
-    tag: .surfing,
-    imageTitle: "저녁에도 서핑과 테니스함",
-    imageDescription: "공관위는 부산시장 후보 자리를 놓고는 전재수 예비후보와 이재성 예비후보 간 경선을 치르기로 했다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    timeSlot: .morning,
+    tag: .swimming,
+    imageTitle: "100일째 새벽 수영 출석 성공",
+    imageDescription: "작년 겨울부터 시작해서 오늘로 딱 100일 개근했습니다. 처음엔 25m도 못 갔는데 이제 1km 연속으로 완주해요. 꾸준함이 답인 것 같아요.",
+    imageData: [UIImage(named: "Image6")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData7 = ActivityData(
-    timeSlot: .evening,
-    tag: .swimming,
-    imageTitle: "러닝 수영 서핑 다 함",
-    imageDescription: "조승래 사무총장은 당내에 후보자들의 비전을 둘러싼 토론을 거치는 것이 좋겠다는 판단이 있었고 후보자들의 경선에 대한 요청도 있었다며 두 분이 네거티브나 상대에 대한 비난보다는 부산의 어려운 미래에 대해 진단하고 정책과 비전을 갖고 경쟁하는 좋은 경선이 될 것이라고 보고 있다고 했다.",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    timeSlot: .morning,
+    tag: .hiking,
+    imageTitle: "올해 목표였던 한라산 백록담 드디어 찍었다",
+    imageDescription: "새벽 4시에 출발해서 8시간 걸렸네요. 정상에서 먹은 컵라면이 진짜 인생 라면이었습니다.",
+    imageData: [UIImage(named: "Image7")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
 let testData8 = ActivityData(
     timeSlot: .evening,
+    tag: .hiking,
+    imageTitle: "관악산 야간 산행 완료",
+    imageDescription: "헤드랜턴 끼고 올라갔는데 정상에서 보이는 서울 야경이 장관이었습니다. 조금 무서웠지만 그만한 가치가 있었어요.",
+    imageData: [UIImage(named: "Image8")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData9 = ActivityData(
+    timeSlot: .evening,
+    tag: .surfing,
+    imageTitle: "서핑 처음 배웠는데 보드 위에 섰어요!!",
+    imageDescription: "양양 입문 클래스 다녀왔습니다. 강사님이 잘 가르쳐 주셔서 첫날에 일어서는 데 성공했어요. 다음 주에 또 가야겠다.",
+    imageData: [UIImage(named: "Image9")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData10 = ActivityData(
+    timeSlot: .morning,
+    tag: .surfing,
+    imageTitle: "제주도 서핑 3일 후기",
+    imageDescription: "오전 일찍 파도가 제일 좋다는 말이 맞더라고요. 매일 아침 6시에 바다 나갔습니다. 실력이 확 는 느낌이에요.",
+    imageData: [UIImage(named: "Image10")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData11 = ActivityData(
+    timeSlot: .evening,
+    tag: .surfing,
+    imageTitle: "부산 송정 파도 진짜 좋았다",
+    imageDescription: "저녁 노을 지는 시간에 탔는데 뷰가 미쳤어요. 파도도 딱 적당해서 너무 좋았습니다.",
+    imageData: [UIImage(named: "Image11")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData12 = ActivityData(
+    timeSlot: .morning,
+    tag: .bicycle,
+    imageTitle: "인천 - 서울 자출 완료",
+    imageDescription: "왕복 말고 편도만 했는데도 허벅지가 터질 것 같네요. 그래도 해냈다는 게 뿌듯합니다.",
+    imageData: [UIImage(named: "Image12")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData13 = ActivityData(
+    timeSlot: .evening,
+    tag: .gym,
+    imageTitle: "스쿼트 100kg 오늘 처음 성공",
+    imageDescription: "6개월 목표였는데 4개월 만에 달성했습니다. 폼 잡는 게 제일 힘들었어요. 같이 운동하는 형 덕분에 해낸 것 같습니다 ㅎㅎ",
+    imageData: [UIImage(named: "Image13")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData14 = ActivityData(
+    timeSlot: .morning,
     tag: .pingpong,
-    imageTitle: "저녁임",
-    imageDescription: "여러분께서 6전 7기에 도전하는 오 후보의 손을 잡아 주실 것을 간곡히 호소드린다",
-    imageData: [UIImage(named: "TestImage1")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+    imageTitle: "탁구 동호회 첫 참가 후기",
+    imageDescription: "동네 탁구장 동호회에 처음 나갔습니다. 다들 엄청 잘 치시는데 그래도 친절하게 맞춰주셔서 재밌었어요. 매주 토요일 오전에 모인다고 하니 계속 나가볼 생각입니다.",
+    imageData: [UIImage(named: "Image14")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData15 = ActivityData(
+    timeSlot: .evening,
+    tag: .pingpong,
+    imageTitle: "탁구 대회 나가서 8강 진출했습니다",
+    imageDescription: "구청 주최 생활체육 대회였는데 생각보다 훨씬 수준이 높더라고요. 그래도 8강까지 올라간 거 만족합니다. 내년엔 4강 목표.",
+    imageData: [UIImage(named: "Image15")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData16 = ActivityData(
+    timeSlot: .morning,
+    tag: .pingpong,
+    imageTitle: "오전 탁구 1시간, 칼로리 소모 장난 아니네요",
+    imageDescription: "가볍게 치는 줄 알았는데 땀이 엄청 나요. 탁구가 이렇게 운동량이 많은 줄 몰랐습니다.",
+    imageData: [UIImage(named: "Image16")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData17 = ActivityData(
+    timeSlot: .evening,
+    tag: .badminton,
+    imageTitle: "사내 배드민턴 대회 준우승",
+    imageDescription: "결승에서 졌지만 나름 만족합니다. 내년엔 우승 노려볼게요.",
+    imageData: [UIImage(named: "Image17")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
+)
+let testData18 = ActivityData(
+    timeSlot: .morning,
+    tag: .gym,
+    imageTitle: "벤치프레스 3개월 만에 20kg 늘었습니다",
+    imageDescription: "처음엔 60kg도 버거웠는데 오늘 80kg 3세트 성공했어요. 식단이랑 수면 관리 병행한 게 도움이 된 것 같습니다.",
+    imageData: [UIImage(named: "Image18")?.jpegData(compressionQuality: 0.8)].compactMap { $0 }
 )
