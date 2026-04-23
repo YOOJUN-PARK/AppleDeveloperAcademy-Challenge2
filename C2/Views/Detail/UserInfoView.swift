@@ -18,6 +18,8 @@ struct UserInfoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @Query private var allActivities: [ActivityData]
+    
     // UserData Model의 파라미터
     @State var userName: String = ""
     @State var userImage: Data? = nil
@@ -46,7 +48,7 @@ struct UserInfoView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .background(Color(.systemGroupedBackground))
-
+                
                 Form {
                     Section("이름") {
                         TextField("닉네임을 입력하세요", text: $userName)
@@ -55,11 +57,22 @@ struct UserInfoView: View {
                                 fieldIsFocused.toggle()
                             }
                     }
-                    
                 }
-                .onTapGesture {
-                    hideKeyboard()
+                .background(Color(.systemGroupedBackground))
+                .onTapGesture { hideKeyboard() }
+                
+                Button("초기화") {
+                    for activity in allActivities {
+                        modelContext.delete(activity)
+                    }
+                    for data in makeDummyData() {
+                        modelContext.insert(data)
+                    }
+                    try? modelContext.save()
                 }
+                .foregroundStyle(.red)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemGroupedBackground))
             }
             
             .navigationTitle("내 프로필")

@@ -81,6 +81,6 @@ struct ActivityCard: View {
 #Preview {
     @Previewable @State var selectedActivity: ActivityData? = nil
     
-    ActivityCard(activityData: testData8)
+    ActivityCard(activityData: testData)
     
 }

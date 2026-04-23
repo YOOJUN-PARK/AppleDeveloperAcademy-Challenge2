@@ -131,7 +131,7 @@ struct ContentView: View {
                     userImage: user.first?.userImage
                 )
                 .presentationDragIndicator(.visible)
-                .presentationDetents([.fraction(0.43), .large])
+                .presentationDetents([.fraction(0.45), .large])
             }
             
             .sheet(isPresented: $showingAddData) {

@@ -64,12 +64,12 @@ struct ActivityDetailView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 35, height: 35)
+                        .frame(width: 30, height: 30)
                         .clipShape(Circle())
                 } else {
                     Circle()
                         .fill(Color.gray.opacity(0.3))
-                        .frame(width: 35, height: 35)
+                        .frame(width: 30, height: 30)
                         .overlay {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 16))
@@ -78,8 +78,8 @@ struct ActivityDetailView: View {
                 }
                 
                 Text(activityData.authorName)
-                    .font(.system(size: 25))
-                    .fontWeight(.medium)
+                    .font(.system(size: 22))
+                    .fontWeight(.semibold)
                 
                 Spacer()
                 
@@ -97,7 +97,7 @@ struct ActivityDetailView: View {
                 
                 
             }
-            .padding(.top, 50)
+            .padding(.top, 40)
             .padding(.horizontal, 20)
             
             // Text
@@ -111,7 +111,7 @@ struct ActivityDetailView: View {
                     .foregroundStyle(Color.lightBlack(scheme: scheme))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 1)
+            .padding(.top, 5)
             .padding(.horizontal, 24)
             
             Map(position: $mapPosition) {
@@ -163,5 +163,5 @@ struct ActivityDetailView: View {
 }
 
 #Preview {
-    ActivityDetailView(activityData: testData4)
+    ActivityDetailView(activityData: testData)
 }
